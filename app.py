@@ -22,6 +22,25 @@ from services.question_service import (
 from services.report_service import (
     create_report
 )
+from flask import (
+    render_template,
+    request,
+    redirect,
+    flash,
+    url_for
+)
+
+from flask_login import (
+    login_user,
+    logout_user,
+    login_required,
+    current_user
+)
+
+from werkzeug.security import (
+    generate_password_hash,
+    check_password_hash
+)
 import os
 
 app = Flask(__name__)
@@ -125,6 +144,74 @@ def upload_resume():
     return render_template(
         "upload_resume.html"
     )
+    @app.route("/register", methods=["GET", "POST"])
+def register():
+
+    if request.method == "POST":
+
+        name = request.form["name"]
+
+        email = request.form["email"]
+
+        password = generate_password_hash(
+            request.form["password"]
+        )
+
+        existing_user = User.query.filter_by(
+            email=email
+        ).first()
+
+        if existing_user:
+
+            flash("Email already exists")
+
+            return redirect("/register")
+
+        user = User(
+            name=name,
+            email=email,
+            password=password
+        )
+
+        db.session.add(user)
+
+        db.session.commit()
+
+        flash("Registration Successful")
+
+        return redirect("/login")
+
+    return render_template("register.html")
+    @app.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+
+    return redirect("/")
+    @app.route("/logout")
+@login_required
+def logout():
+
+    logout_user()
+
+    return redirect("/")
+    resume_record = Resume(
+
+    filename=filename,
+
+    ats_score=ats_score,
+
+    extracted_skills=",".join(skills),
+
+    suggestions=",".join(missing),
+
+    user_id=current_user.id
+)
+
+db.session.add(resume_record)
+
+db.session.commit()
 if __name__ == "__main__":
     app.run(
         debug=True
