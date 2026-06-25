@@ -1,15 +1,15 @@
-import google.generativeai as genai
-from config import Config
+import os
+from google import genai
 
-genai.configure(api_key=Config.GEMINI_API_KEY)
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
-model = genai.GenerativeModel("gemini-1.5-flash")
-
-
-def generate_response(prompt):
+def generate_response(prompt: str) -> str:
+    """Send a prompt to Gemini and return the text response."""
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model="gemini-2.0-flash",
+            contents=prompt
+        )
         return response.text
-
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"Error generating response: {str(e)}"
