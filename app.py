@@ -64,7 +64,23 @@ os.makedirs(
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+@app.route("/analytics")
+@login_required
+def analytics():
 
+    resumes = Resume.query.filter_by(
+        user_id=current_user.id
+    ).all()
+
+    scores = [
+        r.ats_score
+        for r in resumes
+    ]
+
+    return render_template(
+        "analytics.html",
+        scores=scores
+    )
 @app.route("/")
 def home():
     return render_template("index.html")
