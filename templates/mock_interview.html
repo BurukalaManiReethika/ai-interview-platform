@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>AI Mock Interview</h2>
+
+<form method="POST">
+
+<input type="hidden"
+       name="question"
+       value="{{ question }}">
+
+<div class="mb-3">
+
+<label>
+
+Question
+
+</label>
+
+<textarea
+class="form-control"
+readonly>
+
+{{ question }}
+
+</textarea>
+
+</div>
+
+<div class="mb-3">
+
+<label>
+
+Your Answer
+
+</label>
+
+<textarea
+name="answer"
+class="form-control"
+rows="8">
+
+</textarea>
+
+</div>
+
+<button
+class="btn btn-success">
+
+Evaluate
+
+</button>
+
+</form>
+
+{% endblock %}
