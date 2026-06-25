@@ -53,6 +53,40 @@ src="{{ url_for(
 filename='js/charts.js'
 ) }}">
 </script>
+<h1 id="score">
 
+0
+
+</h1>
+
+<script>
+
+let score =
+{{ ats_score }};
+
+let count = 0;
+
+let interval =
+setInterval(()=>{
+
+count++;
+
+document
+.getElementById(
+"score"
+).innerHTML =
+count;
+
+if(count >= score){
+
+clearInterval(
+interval
+);
+
+}
+
+},20);
+
+</script>
 </body>
 </html>
