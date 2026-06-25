@@ -1,1 +1,62 @@
 <h1>Dashboard</h1>
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Dashboard</h1>
+
+<hr>
+
+<h3>Your Resume History</h3>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>Resume</th>
+<th>ATS Score</th>
+
+</tr>
+
+{% for resume in resumes %}
+
+<tr>
+
+<td>{{ resume.filename }}</td>
+
+<td>{{ resume.ats_score }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<hr>
+
+<h3>Interview History</h3>
+
+<table class="table table-bordered">
+
+<tr>
+
+<th>ID</th>
+<th>Score</th>
+
+</tr>
+
+{% for interview in interviews %}
+
+<tr>
+
+<td>{{ interview.id }}</td>
+
+<td>{{ interview.score }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
