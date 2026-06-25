@@ -8,7 +8,7 @@ from models.interview import Interview
 from flask import request
 from werkzeug.utils import secure_filename
 from services.gemini_service import generate_response
-
+from flask import send_file
 from services.pdf_service import extract_text_from_pdf
 from services.ats_service import (
     calculate_ats_score,
@@ -102,6 +102,45 @@ def mock_interview():
     return render_template(
         "mock_interview.html",
         question=sample_question
+    )
+@app.route("/leaderboard")
+@login_required
+def leaderboard():
+
+    users = User.query.all()
+
+    leaderboard_data = []
+
+    for user in users:
+
+        resumes = Resume.query.filter_by(
+            user_id=user.id
+        ).all()
+
+        avg = 0
+
+        if resumes:
+
+            avg = sum(
+                r.ats_score
+                for r in resumes
+            ) / len(resumes)
+
+        leaderboard_data.append(
+            {
+                "name": user.name,
+                "score": round(avg)
+            }
+        )
+
+    leaderboard_data.sort(
+        key=lambda x: x["score"],
+        reverse=True
+    )
+
+    return render_template(
+        "leaderboard.html",
+        users=leaderboard_data
     )
 @app.route("/download-report")
 @login_required
