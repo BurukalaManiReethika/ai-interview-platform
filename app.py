@@ -7,6 +7,7 @@ from models.resume import Resume
 from models.interview import Interview
 from flask import request
 from werkzeug.utils import secure_filename
+from services.gemini_service import generate_response
 
 from services.pdf_service import extract_text_from_pdf
 from services.ats_service import (
@@ -59,6 +60,49 @@ os.makedirs(
     app.config["UPLOAD_FOLDER"],
     exist_ok=True
 )
+@app.route("/mock-interview", methods=["GET", "POST"])
+@login_required
+def mock_interview():
+
+    if request.method == "POST":
+
+        answer = request.form["answer"]
+
+        question = request.form["question"]
+
+        prompt = f"""
+        Evaluate this interview answer.
+
+        Question:
+        {question}
+
+        Answer:
+        {answer}
+
+        Give:
+
+        1. Score out of 10
+        2. Strengths
+        3. Weaknesses
+        4. Improvements
+        """
+
+        feedback = generate_response(prompt)
+
+        return render_template(
+            "evaluation.html",
+            feedback=feedback
+        )
+
+    sample_question = (
+        "Explain the difference between "
+        "Abstraction and Encapsulation."
+    )
+
+    return render_template(
+        "mock_interview.html",
+        question=sample_question
+    )
 
 @login_manager.user_loader
 def load_user(user_id):
