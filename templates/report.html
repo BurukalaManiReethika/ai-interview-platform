@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Analysis Report</title>
+</head>
+
+<body>
+
+<h1>Resume Analysis Report</h1>
+
+<h2>ATS Score</h2>
+
+<p>{{ ats_score }}/100</p>
+
+<h2>Skills Found</h2>
+
+<ul>
+{% for skill in skills %}
+<li>{{ skill }}</li>
+{% endfor %}
+</ul>
+
+<h2>Missing Skills</h2>
+
+<ul>
+{% for skill in missing %}
+<li>{{ skill }}</li>
+{% endfor %}
+</ul>
+
+<h2>Interview Questions</h2>
+
+<pre>
+{{ questions }}
+</pre>
+
+</body>
+</html>
