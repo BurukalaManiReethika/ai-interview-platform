@@ -90,7 +90,30 @@ def home():
 def dashboard():
     return render_template("dashboard.html")
 
+is_admin = db.Column(
+    db.Boolean,
+    default=False
+)
+@app.route("/admin")
+@login_required
+def admin():
 
+    if not current_user.is_admin:
+
+        return "Access Denied"
+
+    users = User.query.count()
+
+    resumes = Resume.query.count()
+
+    interviews = Interview.query.count()
+
+    return render_template(
+        "admin.html",
+        users=users,
+        resumes=resumes,
+        interviews=interviews
+    )
 @app.route("/login")
 def login():
     return render_template("login.html")
