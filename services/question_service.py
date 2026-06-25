@@ -1,24 +1,19 @@
 from services.gemini_service import generate_response
 
 
-def generate_interview_questions(resume_text):
-
+def generate_interview_questions(resume_text: str) -> str:
+    """Use Gemini to generate interview questions tailored to the resume."""
     prompt = f"""
-    Analyze this resume.
+You are an expert technical interviewer. Based on the resume below, generate 10 relevant interview questions.
 
-    Generate:
+Include a mix of:
+- Technical questions based on skills mentioned
+- Behavioural questions (STAR format)
+- Project/experience based questions
 
-    15 Technical Questions
+Format each question on a new line with a number prefix (e.g. "1. ...").
 
-    10 HR Questions
-
-    10 Project Based Questions
-
-    5 Coding Questions
-
-    Resume:
-
-    {resume_text}
-    """
-
+Resume:
+{resume_text[:3000]}
+"""
     return generate_response(prompt)
