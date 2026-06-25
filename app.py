@@ -5,7 +5,23 @@ from config import Config
 from models.user import db, User
 from models.resume import Resume
 from models.interview import Interview
+from flask import request
+from werkzeug.utils import secure_filename
 
+from services.pdf_service import extract_text_from_pdf
+from services.ats_service import (
+    calculate_ats_score,
+    extract_skills,
+    missing_skills
+)
+
+from services.question_service import (
+    generate_interview_questions
+)
+
+from services.report_service import (
+    create_report
+)
 import os
 
 app = Flask(__name__)
@@ -58,7 +74,57 @@ def logout():
 with app.app_context():
     db.create_all()
 
+@app.route("/upload-resume", methods=["GET", "POST"])
+def upload_resume():
 
+    if request.method == "POST":
+
+        file = request.files["resume"]
+
+        if file:
+
+            filename = secure_filename(
+                file.filename
+            )
+
+            filepath = os.path.join(
+                app.config["UPLOAD_FOLDER"],
+                filename
+            )
+
+            file.save(filepath)
+
+            resume_text = extract_text_from_pdf(
+                filepath
+            )
+
+            ats_score = calculate_ats_score(
+                resume_text
+            )
+
+            skills = extract_skills(
+                resume_text
+            )
+
+            missing = missing_skills(
+                skills
+            )
+
+            questions = generate_interview_questions(
+                resume_text
+            )
+
+            return render_template(
+                "report.html",
+                ats_score=ats_score,
+                skills=skills,
+                missing=missing,
+                questions=questions
+            )
+
+    return render_template(
+        "upload_resume.html"
+    )
 if __name__ == "__main__":
     app.run(
         debug=True
