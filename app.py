@@ -103,6 +103,21 @@ def mock_interview():
         "mock_interview.html",
         question=sample_question
     )
+@app.route("/download-report")
+@login_required
+def download_report():
+
+    path = create_report(
+        "report.pdf",
+        85,
+        ["Python","Flask"],
+        "Sample Questions"
+    )
+
+    return send_file(
+        path,
+        as_attachment=True
+    )
 
 @login_manager.user_loader
 def load_user(user_id):
