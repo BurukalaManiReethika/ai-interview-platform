@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>
+
+Admin Dashboard
+
+</h1>
+
+<div class="row">
+
+<div class="col-md-4">
+
+<div class="dashboard-card">
+
+<h3>
+
+Users
+
+</h3>
+
+<h1>
+
+{{ users }}
+
+</h1>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="dashboard-card">
+
+<h3>
+
+Resumes
+
+</h3>
+
+<h1>
+
+{{ resumes }}
+
+</h1>
+
+</div>
+
+</div>
+
+<div class="col-md-4">
+
+<div class="dashboard-card">
+
+<h3>
+
+Interviews
+
+</h3>
+
+<h1>
+
+{{ interviews }}
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}
