@@ -118,6 +118,45 @@ def download_report():
         path,
         as_attachment=True
     )
+    @app.route("/leaderboard")
+@login_required
+def leaderboard():
+
+    users = User.query.all()
+
+    leaderboard_data = []
+
+    for user in users:
+
+        resumes = Resume.query.filter_by(
+            user_id=user.id
+        ).all()
+
+        avg = 0
+
+        if resumes:
+
+            avg = sum(
+                r.ats_score
+                for r in resumes
+            ) / len(resumes)
+
+        leaderboard_data.append(
+            {
+                "name": user.name,
+                "score": round(avg)
+            }
+        )
+
+    leaderboard_data.sort(
+        key=lambda x: x["score"],
+        reverse=True
+    )
+
+    return render_template(
+        "leaderboard.html",
+        users=leaderboard_data
+    )
 
 @login_manager.user_loader
 def load_user(user_id):
