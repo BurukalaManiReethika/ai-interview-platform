@@ -182,6 +182,13 @@ def register():
         return redirect("/login")
 
     return render_template("register.html")
+    @app.route("/profile")
+@login_required
+def profile():
+
+    return render_template(
+        "profile.html"
+    )
     @app.route("/logout")
 @login_required
 def logout():
