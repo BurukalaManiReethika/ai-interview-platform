@@ -2,7 +2,7 @@ import os
 from google import genai
 
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
-
+model="gemini-1.5-flash"
 def generate_response(prompt: str) -> str:
     """Send a prompt to Gemini and return the text response."""
     try:
